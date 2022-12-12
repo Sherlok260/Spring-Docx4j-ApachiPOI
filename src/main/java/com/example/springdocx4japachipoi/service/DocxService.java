@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -34,7 +36,7 @@ public class DocxService {
         return result;
     }
 
-    public ApiResponse translator() throws JAXBException, Docx4JException {
+    public ApiResponse translator() throws JAXBException, Docx4JException, IOException {
 
         File doc = new File("Reja.docx");
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
@@ -58,11 +60,14 @@ public class DocxService {
 //                System.out.println(text.getValue());
             }
         }
+//        FileWriter xmlFile = new FileWriter("resultXML.xml");
+//        xmlFile.write(xml);
 //        System.out.println(xml);
 
         try {
             mainDocumentPart.setJaxbElement((org.docx4j.wml.Document) XmlUtils.unmarshalString(xml));
             wordMLPackage.save(new File("Result.docx"));
+
             return new ApiResponse("success", true);
         } catch (Exception e) {
             e.printStackTrace();
